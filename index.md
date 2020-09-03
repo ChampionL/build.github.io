@@ -1,6 +1,6 @@
-
-#Redis内存分配原理
 [TOC]
+
+# Redis内存分配原理
 
 Redis内存分配源码文件
 zmalloc.h zmalloc.c
