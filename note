@@ -48,3 +48,11 @@ void redisSetProcTitle(char *title) {
 }
 ···
 
+
+[root@sms_monitor_03 /home/cubinlai]# ps -ef | grep redis
+root      2013     1  0  2019 ?        09:16:07 ./redis-server 0.0.0.0:6379
+root      5892  5831  0 17:13 pts/4    00:00:00 ./redis-cli
+root     13837  2013 94 17:28 ?        00:00:02 redis-aof-rewrite 0.0.0.0:6379
+root     13845  6213  0 17:28 pts/8    00:00:00 grep --color=auto redis
+
+
