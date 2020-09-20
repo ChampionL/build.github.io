@@ -1,0 +1,50 @@
+```
+#include <errno.h>
+#include <stdio.h>
+int main()
+{
+ 
+ 			        printf("program_invocation_name: %s\n", program_invocation_name);
+ 
+ 			        printf("program_invocation_short_name: %s\n", program_invocation_short_name);
+ 
+ 			        return 0;
+ 
+} 
+```
+
+root@test$/data/test/a.out 
+program_invocation_name: /data/test/a.out
+program_invocation_short_name: a.out
+```
+
+
+[root@sms_monitor_03 /home/cubinlai]# ps -ef | grep redis
+root      2013     1  0  2019 ?        09:16:07 ./redis-server 0.0.0.0:6379
+root      5892  5831  0 17:13 pts/4    00:00:00 ./redis-cli
+root     12661  2013 87 17:25 ?        00:00:05 redis-rdb-bgsave 0.0.0.0:6379
+root     12669  6213  0 17:25 pts/8    00:00:00 grep --color=auto redis
+
+目前调用redisSetProcTitle设置进程名称的存在两个地方
+redisSetProcTitle("redis-rdb-bgsave");
+redisSetProcTitle("redis-aof-rewrite");
+设置过这两个进程名称，起具体形式如下
+
+···
+void redisSetProcTitle(char *title) {
+#ifdef USE_SETPROCTITLE
+    char *server_mode = "";
+    if (server.cluster_enabled) server_mode = " [cluster]";
+    else if (server.sentinel_mode) server_mode = " [sentinel]";
+
+    setproctitle("%s %s:%d%s",
+        title,
+        server.bindaddr_count ? server.bindaddr[0] : "*",
+        server.port,
+        server_mode);
+#else
+    REDIS_NOTUSED(title);
+#endif
+}
+···
+
